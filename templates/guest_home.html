@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+
+{% block body_content %}
+<table border="1">
+  <thead>
+      <tr>
+          <th>Book Name</th>
+          <th>Author</th>
+          <th>Owner</th>
+          <th>Availability</th>
+          <th>Listing Date</th>
+      </tr>
+  </thead>
+  <tbody>
+      {% for book in books %}
+      <tr class="{% cycle 'row-even' 'row-odd' %}">
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.owner }}</td>
+          <td>
+              {% if book.is_available %}
+                  Available
+              {% else %}
+                  Due to {{ book.avaliable_at }}
+              {% endif %}
+          </td>
+          <td>{{ book.listing_date }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+          <td colspan="5">No books available.</td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
+
+{% endblock body_content %}

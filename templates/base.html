@@ -100,19 +100,26 @@
         span.helptext{
             display: none;
         }
+        .hideable{
+            display: none;
+        }
     </style>
     {% block head_content %}{% endblock head_content %}
 </head>
 <body>
 
     <div class="navbar">
-        <form action="{% url 'home' %}" method="post" class="nav-button">
+        <form action="{% url 'user_home' %}" method="post" class="nav-button">
             {% csrf_token %}
             <button type="submit">Home</button>
         </form>
-        <form action="{% url 'home' %}" method="post" class="nav-button">
+        <form action="{% url 'profile' %}" method="post" class="nav-button hideable">
             {% csrf_token %}
-            <button type="submit">Home</button>
+            <button type="submit">Profile</button>
+        </form>
+        <form action="{% url 'logout' %}" method="post" class="nav-button hideable">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
         </form>
     </div>
 

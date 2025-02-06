@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+    <style>
+    .nav-button{
+            display: flex;
+        }
+    </style>
+{% endblock head_content %}
+
+{% block body_content %}
+<table border="1">
+  <thead>
+      <tr>
+          <th>Book Name</th>
+          <th>Author</th>
+          <th>Owner</th>
+          <th>Availability</th>
+          <th>Listing Date</th>
+          <th>Action</th>  <!-- New column for the button -->
+      </tr>
+  </thead>
+  <tbody>
+      {% for book in books %}
+      <tr class="{% cycle 'row-even' 'row-odd' %}">
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.owner }}</td>
+          <td>
+              {% if book.is_available %}
+                  Available
+              {% else %}
+                  Due to {{ book.avaliable_at }}
+              {% endif %}
+          </td>
+          <td>{{ book.listing_date }}</td>
+          <td>
+              {% if book.is_available %}
+              <form action="{% url 'lend_book' book.id %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit">Lend</button>
+              </form>
+              {% else %}
+                  <span style="color: gray;">Unavailable</span>
+              {% endif %}
+          </td>
+      </tr>
+      {% empty %}
+      <tr>
+          <td colspan="6">No books available.</td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
+
+{% endblock body_content %}
