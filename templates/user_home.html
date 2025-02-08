@@ -30,16 +30,17 @@
               {% if book.is_available %}
                   Available
               {% else %}
-                  Due to {{ book.avaliable_at }}
+                  Due to {{ book.available_at }}
               {% endif %}
           </td>
           <td>{{ book.listing_date }}</td>
           <td>
               {% if book.is_available %}
-              <form action="{% url 'lend_book' book.id %}" method="post">
-                  {% csrf_token %}
-                  <button type="submit">Lend</button>
-              </form>
+              <form action="{% url 'home' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="book_id" value="{{ book.id }}">
+              <button type="submit">Lend</button>
+            </form>
               {% else %}
                   <span style="color: gray;">Unavailable</span>
               {% endif %}

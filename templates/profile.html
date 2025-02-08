@@ -7,7 +7,6 @@
           <th>Book Name</th>
           <th>Author</th>
           <th>Lended</th>
-          <th>Listing Date</th>
           <th>Action</th>
       </tr>
   </thead>
@@ -20,28 +19,23 @@
               {% if book.is_available %}
                   No
               {% else %}
-                  Due to {{ book.avaliable_at }}
+                  Due to {{ book.available_at }}
               {% endif %}
           </td>
           <td>
-            {% if book.is_listed %}
-              {{ book.listing_date }}
-            {% else %}
-              Not Listed
-            {% endif %}
-          </td>
-          <td>
-            {% if book.is_listed and book.is_avaliable %}
-            <form action="{% url 'unlist_book' book.id %}" method="post">
+            {% if book.is_listed and book.is_available %}
+            <form action="{% url 'profile' %}" method="post">
               {% csrf_token %}
+              <input type="hidden" name="book_id" value="{{ book.id }}">
               <button type="submit">Unlist</button>
             </form>
-            {% elif book.is_listed and not book.is_avaliable %}
+            {% elif book.is_listed and not book.is_available %}
                 <span style="color: gray;">Wait the due date</span>
             {% else %}
-            <form action="{% url 'list_book' book.id %}" method="post">
+            <form action="{% url 'profile' %}" method="post">
               {% csrf_token %}
-              <button type="submit">List for lending</button>
+              <input type="hidden" name="book_id" value="{{ book.id }}">
+              <button type="submit">List</button>
             </form>
             {% endif %}
           </td>
