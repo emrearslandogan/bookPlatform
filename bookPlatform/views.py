@@ -16,7 +16,7 @@ def register(request):
   else:
     form = UserCreationForm()
 
-  return render(request, 'register.html', {'form': form})
+  return render(request, 'register.html', {'form': form, "logged_in": 0})
 
 
 def login(request):
@@ -25,12 +25,12 @@ def login(request):
     if form.is_valid():
       user = form.get_user()
       auth_login(request, user)
-      return redirect("user_home")
+      return redirect("home")
 
   else:
     form = AuthenticationForm()
 
-  return render(request, 'login.html', {'form': form})
+  return render(request, 'login.html', {'form': form, "logged_in": 0})
 
 
 def logout(request):
@@ -38,18 +38,34 @@ def logout(request):
   return redirect('login')
 
 
-def guest_home(request): # this will be the view for guest
+def home(request): # this will be the view for guest
   # each listing in the home page will have the name, name of the owner, listing date and avaliability status
-  books = Books.objects.exclude(owner=request.user.username)
+  if not request.user.is_authenticated:
+    books = Books.objects.all()
+    return render(request, 'guest_home.html', {'books': books, "logged_in": 0})
 
-  return render(request, 'guest_home.html', {'books': books})
+  else:
+    books = Books.objects.exclude(owner=request.user.username)
+    return render(request, 'user_home.html', {'books': books, "logged_in": 1})
 
-
-@login_required(redirect_field_name="guest_home")
-def user_home(request): # this will be the view for the users. Difference is the profile button and lending option
-  books = Books.objects.exclude(owner=request.user.username)
-
-  return render(request, 'user_home.html', {'books': books})
-
+@login_required(login_url=login)
 def profile(request):
-  return "<p> Cant we be friends </p>"
+  books = Books.objects.filter(owner=request.user.username)
+  return render(request, "profile.html", {"books": books, "logged_in": 1})
+
+
+@login_required(login_url=login)
+def add_book(request):
+  if request.method == "POST":
+    title = request.POST.get("title")
+    author = request.POST.get("author")
+    year = request.POST.get("year")
+    publisher = request.POST.get("publisher")
+
+    if title and author and year:
+      Books.objects.create(title=title, author=author, year=int(year), publisher=publisher, owner=request.user.username)
+      return redirect("profile")  # Redirect to the homepage after saving
+
+  return render(request, "add_book.html", {"logged_in": 1})
+
+

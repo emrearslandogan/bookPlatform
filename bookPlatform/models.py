@@ -8,8 +8,9 @@ class Books(models.Model):
   year = models.IntegerField()
   publisher = models.CharField(max_length=100)
   owner = models.CharField(max_length=100)
-  is_avaliable = models.BooleanField()
+  is_avaliable = models.BooleanField(default=False)
   avaliable_at = models.DateTimeField(default=datetime.datetime.now)
+  is_listed = models.BooleanField(default=False)
   def __str__(self):
     return self.title
 

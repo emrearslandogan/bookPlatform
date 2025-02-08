@@ -50,6 +50,7 @@
             margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 1rem;
         }
         p:empty{
             display: none;
@@ -74,7 +75,6 @@
             align-content: center;
             justify-content: center;
         }
-        
         .password-rules {
             display: none;
         }
@@ -90,9 +90,6 @@
             font-size: 1rem;
             width: 30vw;
         }
-        .nav-button{
-            display: none;
-        }
         p.auth{
             color: rgb(32, 32, 32);
             font-size: 1rem;
@@ -100,27 +97,60 @@
         span.helptext{
             display: none;
         }
-        .hideable{
-            display: none;
+        .book-table{
+            margin-top: 2rem;
+            border-collapse: collapse;
+            width: 70vw;
+            border-top: none;
+            border-right: none;
+            border-left: none;
         }
+        .book-form{
+            margin-top: 2rem ;
+        }
+        th{
+            height: 3rem;
+        }
+        th, td{
+            border-bottom: 3px solid rgb(39, 39, 39);
+        }
+        td {
+            height: 2.5rem;
+            text-align: center;
+        }
+        tr:hover {
+            background-color: rgb(214, 191, 161);
+        }
+
     </style>
     {% block head_content %}{% endblock head_content %}
 </head>
 <body>
 
     <div class="navbar">
-        <form action="{% url 'user_home' %}" method="post" class="nav-button">
+        <form action="{% url 'home' %}" method="post" class="nav-button">
             {% csrf_token %}
             <button type="submit">Home</button>
         </form>
-        <form action="{% url 'profile' %}" method="post" class="nav-button hideable">
+        {% if logged_in %}
+        <form action="{% url 'profile' %}" method="post" class="nav-button">
             {% csrf_token %}
             <button type="submit">Profile</button>
         </form>
-        <form action="{% url 'logout' %}" method="post" class="nav-button hideable">
+        <form action="{% url 'logout' %}" method="post" class="nav-button">
             {% csrf_token %}
             <button type="submit">Logout</button>
         </form>
+        {% else %}
+        <form action="{% url 'login' %}" method="post" class="nav-button">
+            {% csrf_token %}
+            <button type="submit">Login</button>
+        </form>
+        <form action="{% url 'register' %}" method="post" class="nav-button">
+        {% csrf_token %}
+        <button type="submit">Register</button>
+        </form>
+        {% endif %}
     </div>
 
     <div class="main_content">
